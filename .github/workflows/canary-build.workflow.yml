@@ -1,0 +1,46 @@
+name: Canary Build
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+    paths:
+      - 'includes/**/*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  canary-build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Release
+        run: |
+          mkdir -p build
+          g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch arm64 -o build/libTinyMidi-arm64.dylib includes/TinyMidi/TinyMidi.cpp
+          g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch x86_64 -o build/libTinyMidi-x86_64.dylib includes/TinyMidi/TinyMidi.cpp
+          lipo -create -output build/libTinyMidi.dylib build/libTinyMidi-arm64.dylib build/libTinyMidi-x86_64.dylib
+          lipo -info build/libTinyMidi.dylib
+
+  canary-build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Release
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          mkdir -p build
+          cl /EHsc /std:c++17 /c includes/TinyMidi/TinyMidi.cpp /Fo:build\TinyMidi.obj
+          link /DLL /MACHINE:X64 /OUT:build\libTinyMidi.dll /IMPLIB:build\libTinyMidi.lib build\TinyMidi.obj winmm.lib
+          del build\TinyMidi.obj

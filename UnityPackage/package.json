@@ -1,0 +1,26 @@
+{
+  "name": "com.scottdoxey.tiny-midi",
+  "displayName": "TinyMidi",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "Tiny Midi input library.",
+  "documentationUrl": "https://github.com/neogeek/tiny-midi",
+  "changelogUrl": "https://github.com/neogeek/tiny-midi/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/neogeek/tiny-midi/blob/main/LICENSE",
+  "license": "MIT",
+  "dependencies": {},
+  "keywords": [
+    "midi",
+    "input"
+  ],
+  "author": {
+    "name": "Scott Doxey",
+    "email": "hello@scottdoxey.com",
+    "homepage": "http://scottdoxey.com/"
+  },
+  "homepage": "https://github.com/neogeek/tiny-midi",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:neogeek/tiny-midi.git"
+  }
+}

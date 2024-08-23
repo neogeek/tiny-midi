@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CWD=$(pwd)
+
+FOLDERS=("UnityPackage/Libs/")
+
+for FOLDER in "${FOLDERS[@]}"; do
+  if [[ $(
+    git diff HEAD --exit-code --quiet --binary "${FOLDER}"
+    echo $?
+  ) -ne 0 ]]; then
+    echo "Do not commit build files."
+    exit 1
+  fi
+done
+
+cd "${CWD}"
