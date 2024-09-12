@@ -109,7 +109,7 @@ public class TinyMidiTest : MonoBehaviour
                     break;
                 case TinyMidi.MidiEventStatus.NoteOff:
                     Debug.Log(
-                        $"Note Down: {midiEvent.controllerNumber}" +
+                        $"Note Up: {midiEvent.controllerNumber}" +
                         $" Velocity: {midiEvent.value}" +
                         $" Device Index: {midiEvent.deviceIndex}");
 
