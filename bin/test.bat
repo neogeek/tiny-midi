@@ -7,6 +7,6 @@ if not defined VCINSTALLDIR (
 
 mkdir build
 
-cl /EHsc /std:c++17 /Iincludes /Fe:build\tinymidi.exe src\*.cpp winmm.lib
+cl /EHsc /std:c++17 /Iinclude /Fe:build\tinymidi.exe src\*.cpp winmm.lib
 
 del main.obj
