@@ -7,7 +7,7 @@ if not defined VCINSTALLDIR (
 
 mkdir build
 
-cl /EHsc /std:c++17 /c includes/TinyMidi/TinyMidi.cpp /Fo:build\TinyMidi.obj
+cl /EHsc /std:c++17 /c include/TinyMidi/TinyMidi.cpp /Fo:build\TinyMidi.obj
 
 link /DLL /MACHINE:X64 /OUT:build\libTinyMidi.dll /IMPLIB:build\libTinyMidi.lib build\TinyMidi.obj winmm.lib
 

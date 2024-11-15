@@ -16,8 +16,8 @@ COLOROFF=$(tput sgr0)
 
   printf "Building macOS libraries ... "
 
-  g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch arm64 -o build/libTinyMidi-arm64.dylib includes/TinyMidi/TinyMidi.cpp
-  g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch x86_64 -o build/libTinyMidi-x86_64.dylib includes/TinyMidi/TinyMidi.cpp
+  g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch arm64 -o build/libTinyMidi-arm64.dylib include/TinyMidi/TinyMidi.cpp
+  g++ -std=c++17 -framework CoreMIDI -framework CoreFoundation -shared -fPIC -arch x86_64 -o build/libTinyMidi-x86_64.dylib include/TinyMidi/TinyMidi.cpp
 
   if [[ ! -f build/libTinyMidi-arm64.dylib || ! -f build/libTinyMidi-x86_64.dylib ]]; then
     exit 1
