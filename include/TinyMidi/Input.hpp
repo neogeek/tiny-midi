@@ -1,8 +1,6 @@
 #pragma once
 
-#include <algorithm>
-#include <functional>
-#include <iostream>
+#include <thread>
 #include <vector>
 
 #ifdef _WIN32
@@ -26,7 +24,7 @@ struct MIDIContext
     int deviceIndex;
 };
 
-enum MidiEventStatus
+enum MidiEventStatus : uint8_t
 {
     NoteOn = 144,
     NoteOff = 128,
@@ -42,7 +40,7 @@ struct MidiEvent
     int deviceIndex;
 };
 
-typedef void (*MidiEventListener)(MidiEvent);
+using MidiEventListener = void (*)(MidiEvent);
 
 #ifdef _WIN32
 std::vector<HMIDIIN> hMidiInList;
@@ -53,6 +51,8 @@ CFRunLoopRef runLoop;
 #endif
 
 std::vector<MidiEventListener> midiEventListeners;
+
+std::thread running;
 
 void TriggerEventListeners(MidiEvent midiEvent)
 {
@@ -85,9 +85,9 @@ void MIDIReadProc(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance,
 void MIDIReadProc(const MIDIPacketList *packetList, void *readProcRefCon,
                   void *srcConnRefCon)
 {
-    auto context = static_cast<MIDIContext *>(srcConnRefCon);
+    auto *context = static_cast<MIDIContext *>(srcConnRefCon);
 
-    auto packet = &packetList->packet[0];
+    const auto *packet = &packetList->packet[0];
 
     for (unsigned int i = 0; i < packetList->numPackets; i++)
     {
@@ -117,7 +117,7 @@ extern "C"
         {
             auto source = MIDIGetSource(index);
 
-            auto context = new MIDIContext();
+            auto *context = new MIDIContext();
             context->deviceIndex = index;
 
             MIDIPortConnectSource(inputPort, source, context);
@@ -172,6 +172,16 @@ extern "C"
 #elif __APPLE__
         CFRunLoopStop(runLoop);
 #endif
+    }
+}
+
+auto StartThread() { running = std::thread(Start); }
+
+auto StopThread()
+{
+    if (running.joinable())
+    {
+        running.join();
     }
 }
 

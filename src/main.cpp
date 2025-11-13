@@ -1,17 +1,9 @@
-#include <csignal>
 #include <iostream>
 #include <thread>
 
 #include "TinyMidi/Input.hpp"
 
-void signalHandler(int signum)
-{
-    TinyMidi::Stop();
-
-    exit(signum);
-}
-
-int main()
+auto main() -> int
 {
     TinyMidi::Setup();
 
@@ -23,32 +15,29 @@ int main()
             case TinyMidi::MidiEventStatus::NoteOn:
                 std::cout << "Note Down: " << midiEvent.controllerNumber
                           << " Velocity: " << midiEvent.value
-                          << " Device Index: " << midiEvent.deviceIndex
-                          << std::endl;
+                          << " Device Index: " << midiEvent.deviceIndex << "\n";
                 break;
             case TinyMidi::MidiEventStatus::NoteOff:
                 std::cout << "Note Up: " << midiEvent.controllerNumber
                           << " Velocity: " << midiEvent.value
-                          << " Device Index: " << midiEvent.deviceIndex
-                          << std::endl;
+                          << " Device Index: " << midiEvent.deviceIndex << "\n";
                 break;
             case TinyMidi::MidiEventStatus::ControlChange:
                 std::cout << "Control Changed: " << midiEvent.controllerNumber
                           << " Value: " << midiEvent.value
-                          << " Device Index: " << midiEvent.deviceIndex
-                          << std::endl;
+                          << " Device Index: " << midiEvent.deviceIndex << "\n";
                 break;
             }
         });
 
-    TinyMidi::Start();
-
-    std::signal(SIGINT, signalHandler);
+    TinyMidi::StartThread();
 
     while (true)
     {
         std::this_thread::yield();
     }
+
+    TinyMidi::StopThread();
 
     return 0;
 }
